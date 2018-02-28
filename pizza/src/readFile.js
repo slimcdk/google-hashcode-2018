@@ -1,4 +1,4 @@
-console.log("running script");
+console.log("Script Started");
 
 let fs = require('fs');
 let filename = process.argv[2];
@@ -15,12 +15,12 @@ fs.readFile(filename, 'utf8', function (err, data) {
     console.log(data);
 
     writeFile(jsonToRaw(run(rawToJSON(data))));
+    console.log("Script Finished");
 });
 
 function rawToJSON(data) {
     let lines = data.split("\r\n");
     let rules = lines[0].split(" ");
-    //console.log("Rules: " + rules);
 
     let res = {
         rows: rules[0],
@@ -31,11 +31,8 @@ function rawToJSON(data) {
     };
 
     for (let i = 1; i < lines.length - 1; i++) {
-        //console.log(lines[i]);
         res.map.push(lines[i].split(""));
     }
-
-    //console.log(res);
 
     return res;
 }
