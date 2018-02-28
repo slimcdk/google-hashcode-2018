@@ -14,13 +14,13 @@ fs.readFile(filename, 'utf8', function (err, data) {
     console.log('OK: ' + filename);
     console.log(data);
 
-    rawToJSON(data);
+    writeFile(jsonToRaw(run(rawToJSON(data))));
 });
 
 function rawToJSON(data) {
     let lines = data.split("\r\n");
     let rules = lines[0].split(" ");
-    console.log("Rules: " + rules);
+    //console.log("Rules: " + rules);
 
     let res = {
         rows: rules[0],
@@ -35,9 +35,20 @@ function rawToJSON(data) {
         res.map.push(lines[i].split(""));
     }
 
-    console.log(res);
+    //console.log(res);
 
-    writeFile(data);
+    return res;
+}
+
+function jsonToRaw(data) {
+    let res = "";
+    for (let i = 0; i < data.map.length; i++) {
+        for (let j = 0; j < data.map[i].length; j++) {
+            res += data.map[i][j];
+        }
+        res += "\n";
+    }
+    return res;
 }
 
 function writeFile(data) {
@@ -50,4 +61,20 @@ function writeFile(data) {
             console.log("done!");
         }
     });
+}
+
+/******************************************************************************************************
+ * ****************************************************************************************************
+ * ****************************************************************************************************
+ * ****************************************************************************************************
+ * ****************************************************************************************************
+ * ****************************************************************************************************
+ */
+
+function run(data) {
+    console.log("RUNNING");
+    console.log(data);
+    console.log("RUNNING FINISHED");
+
+    return data;
 }
