@@ -49,8 +49,11 @@ function jsonToRaw(data) {
 }
 
 function writeFile(data) {
-    console.log("writing file..");
+    if(process.argv[3] != "print"){
+        return;
+    }
 
+    console.log("writing file..");
     fs.appendFile(new Date().getTime() + '.out', data, (err) => {
         if (err) {
             console.error("failed!")
@@ -67,6 +70,7 @@ function writeFile(data) {
  * ****************************************************************************************************
  * ****************************************************************************************************
  */
+
 
 function run(data) {
     console.log("RUNNING");
