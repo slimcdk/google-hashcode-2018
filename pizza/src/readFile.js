@@ -11,7 +11,7 @@ if (process.argv.length < 3) {
 
 fs.readFile(filename, 'utf8', function (err, data) {
     if (err) throw err;
-    console.log('OK: ' + filename);
+    console.log('File success: ' + filename);
     console.log(data);
 
     writeFile(jsonToRaw(run(rawToJSON(data))));
@@ -38,12 +38,9 @@ function rawToJSON(data) {
 }
 
 function jsonToRaw(data) {
-    let res = "";
-    for (let i = 0; i < data.map.length; i++) {
-        for (let j = 0; j < data.map[i].length; j++) {
-            res += data.map[i][j];
-        }
-        res += "\n";
+    let res = data.length.toString() + "\n";
+    for (let i = 0; i < data.length; i++) {
+        res += data[i] + "\n";
     }
     return res;
 }
@@ -71,11 +68,11 @@ function writeFile(data) {
  * ****************************************************************************************************
  */
 
-
 function run(data) {
+    let res = ["0 0 2 1", "8 12 631 2", "4 3 2 1"];
     console.log("RUNNING");
     console.log(data);
     console.log("RUNNING FINISHED");
 
-    return data;
+    return res;
 }
