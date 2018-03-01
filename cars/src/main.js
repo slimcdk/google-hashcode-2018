@@ -64,7 +64,9 @@ function writeFile(data) {
     }
 
     console.log("writing file..");
-    fs.appendFile(new Date().getTime() + '.out', data, (err) => {
+    let output_name = filename.split('/');
+
+    fs.appendFile(output_name[output_name.length-1].split('.')[0] + '.out', data, (err) => {
         if (err) {
             console.error("failed!")
         } else {
@@ -85,4 +87,5 @@ function run(data) {
     console.log("RUNNING");
     console.log(data);
     console.log("RUNNING FINISHED");
+    writeFile()
 }
