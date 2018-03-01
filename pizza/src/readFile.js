@@ -200,20 +200,42 @@ function insideArray(x, y, w, h, shape) {
 
 function slicePizza(data) {
     console.log(data);
-    let worst = getWorstUnusedPiece(data);
-    if (data[worst.y][worst.x].s > 0) {
-        slicePiece(data, worst);
-    } else {
-        data[worst.y][worst.x].u = true;
-    }
+    slicePiece(data, getWorstUnusedPiece(data));
+    slicePiece(data, getWorstUnusedPiece(data));
+    slicePiece(data, getWorstUnusedPiece(data));
 }
 
 function slicePiece(data, cell) {
-    console.log(cell);
+    console.log(data[cell.y][cell.x]);
+    data[cell.y][cell.x].u = true;
 }
 
 function getWorstUnusedPiece(data) {
-    
+    // find first unused
+    let search = true;
+    let unPos = {x: -1, y: -1};
+    for (let i = 0; i < data.length; i++) {
+        if (search) {
+            for (let j = 0; j < data[i].length; j++) {
+                if (search) {
+                    if (!data[i][j].u) {
+                        console.log(data[i][j].u);
+                        unPos.x = j;
+                        unPos.y = i;
+                        search = false;
+                        console.log("ONE FOUND");
+                    }
+                }
+            }
+        }
+    }
+    console.log(unPos);
+
+
+
+
+
+
     let least = data[0][0].s;
     let pos = {x: 0, y: 0};
     for (let i = 0; i < data.length; i++) {
