@@ -37,7 +37,7 @@ function rawToJSON(data) {
         if (lines[i].length) {
             let data = lines[i].split(" ");
             res.map.push({
-                index: i,
+                index: i - 1,
                 occupied: false,
                 start: {x: data[1], y: data[0]},
                 stop: {x: data[3], y: data[2]},
@@ -72,13 +72,13 @@ function writeFile(data) {
     }
 
     let output_name = filename.split('/');
-    output_name = output_name[output_name.length-1].split('.')[0] + '.out'
+    output_name = output_name[output_name.length - 1].split('.')[0] + '.out'
 
     console.log("writing file..");
 
 
-    fs.unlink(output_name, function(err) {
-        if(err && err.code === 'ENOENT') {
+    fs.unlink(output_name, function (err) {
+        if (err && err.code === 'ENOENT') {
             // file doens't exist
             console.info("File doesn't exist, won't remove it.");
         } else if (err) {
@@ -120,14 +120,52 @@ function writeFile(data) {
 
 function run(data) {
     console.log("RUNNING");
-    console.log(data);
+    //console.log(data);
 
-    let res = [
+    let cars = [];
+    for (let i = 0; i < data.fleet; i++) {
+        cars.push({
+            active: true,
+            finished: [],
+            possible: [],
+            pos: {x: 0, y: 0}
+        });
+    }
+
+    let step = 0;
+    for (let i = 0; i < cars.length; i++) {
+        getRoutes(cars[i], data, step);
+    }
+    console.log(cars);
+
+
+    /*let res = [
         [0],
         [2, 1]
     ];
-
-    jsonToRaw(res);
+    jsonToRaw(res);*/
 
     console.log("RUNNING FINISHED");
+}
+
+function getRoutes(car, data, step) {
+    car.possible = [];
+    for (let i = 0; i < data.map.length; i++) {
+        // all routes
+        if (!data.map[i].occupied) {
+
+            // all available routes
+            let distStart = Math.abs(car.pos.x - data.map[i].start.x) + Math.abs(car.pos.y - data.map[i].start.y);
+            let routeLength = Math.abs(data.map[i].stop.x - data.map[i].start.x) + Math.abs(data.map[i].start.y - data.map[i].start.y);
+
+            if (distStart + routeLength + step < data.map[i].end) {
+                // routes possible before deadline
+                car.possible.push(data.map[i].index);
+            }
+
+
+
+            //if (distStart <= data.map[i].begin) {}
+        }
+    }
 }
