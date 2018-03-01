@@ -211,6 +211,7 @@ function slicePiece(data, cell) {
 }
 
 function getWorstUnusedPiece(data) {
+
     // find first unused
     let search = true;
     let unPos = {x: -1, y: -1};
