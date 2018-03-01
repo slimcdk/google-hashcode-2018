@@ -213,7 +213,7 @@ function slicePiece(data, cell) {
 }
 
 function getWorstUnusedPiece(data) {
-    
+
     let least = data[0][0].s;
     let pos = {x: 0, y: 0};
     for (let i = 0; i < data.length; i++) {
