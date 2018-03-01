@@ -48,15 +48,21 @@ function rawToJSON(data) {
     return res;
 }
 
-/*
+
 function jsonToRaw(data) {
-    let res = data.length.toString() + "\n";
+    let res = "";
     for (let i = 0; i < data.length; i++) {
-        res += data[i] + "\n";
+        if (data[i].length > 0) {
+            res += data[i].length;
+            for (let j = 0; j < data[i].length; j++) {
+                res += " " + data[i][j];
+            }
+            res += "\n";
+        }
     }
-    return res;
+    writeFile(res);
 }
-*/
+
 
 function writeFile(data) {
     if (process.argv[3] != "print") {
@@ -86,6 +92,12 @@ function writeFile(data) {
 function run(data) {
     console.log("RUNNING");
     console.log(data);
+
+    let res = [
+        [0],
+        [2, 1]
+    ];
+    jsonToRaw(res);
+
     console.log("RUNNING FINISHED");
-    writeFile()
 }
