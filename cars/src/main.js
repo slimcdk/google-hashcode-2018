@@ -146,8 +146,9 @@ function run(data) {
                 }
             }
         }
+        console.log(step + " / " + data.steps);
     }
-    console.log(cars);
+    //console.log(cars);
 
     let res = [];
     for (let i = 0; i < cars.length; i++) {
@@ -164,7 +165,7 @@ function pickRoute(car, data) {
     car.pos = data.map[route.index].stop;
     route.occupied = true;
     car.steps += car.possible[0].totSteps;
-    console.log(car);
+    //console.log(car);
 }
 
 function getRoutes(car, data, step) {
@@ -176,7 +177,7 @@ function getRoutes(car, data, step) {
             // all available routes
             let distStart = Math.abs(car.pos.x - data.map[i].start.x) + Math.abs(car.pos.y - data.map[i].start.y);
             let routeLength = Math.abs(data.map[i].stop.x - data.map[i].start.x) + Math.abs(data.map[i].stop.y - data.map[i].start.y);
-            console.log(distStart, routeLength);
+            //console.log(distStart, routeLength);
 
             if (distStart + routeLength + step < data.map[i].end) {
                 // routes possible before deadline
