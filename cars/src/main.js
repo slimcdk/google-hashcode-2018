@@ -126,26 +126,45 @@ function run(data) {
     for (let i = 0; i < data.fleet; i++) {
         cars.push({
             active: true,
+            steps: 0,
             finished: [],
             possible: [],
             pos: {x: 0, y: 0}
         });
     }
 
-    let step = 0;
-    for (let i = 0; i < cars.length; i++) {
-        getRoutes(cars[i], data, step);
+    for (let step = 0; step < data.steps; step++) {
+        for (let i = 0; i < cars.length; i++) {
+            let car = cars[i];
+            if (car.active && car.steps <= step) {
+                getRoutes(car, data, step);
+                sortRoutes(car);
+                if (car.possible.length > 0) {
+                    pickRoute(car, data);
+                } else {
+                    car.active = false;
+                }
+            }
+        }
     }
     console.log(cars);
 
-
-    /*let res = [
-        [0],
-        [2, 1]
-    ];
-    jsonToRaw(res);*/
+    let res = [];
+    for (let i = 0; i < cars.length; i++) {
+        res.push(cars[i].finished);
+    }
+    jsonToRaw(res);
 
     console.log("RUNNING FINISHED");
+}
+
+function pickRoute(car, data) {
+    let route = data.map[car.possible[0].index];
+    car.finished.push(route.index);
+    car.pos = data.map[route.index].stop;
+    route.occupied = true;
+    car.steps += car.possible[0].totSteps;
+    console.log(car);
 }
 
 function getRoutes(car, data, step) {
@@ -156,16 +175,30 @@ function getRoutes(car, data, step) {
 
             // all available routes
             let distStart = Math.abs(car.pos.x - data.map[i].start.x) + Math.abs(car.pos.y - data.map[i].start.y);
-            let routeLength = Math.abs(data.map[i].stop.x - data.map[i].start.x) + Math.abs(data.map[i].start.y - data.map[i].start.y);
+            let routeLength = Math.abs(data.map[i].stop.x - data.map[i].start.x) + Math.abs(data.map[i].stop.y - data.map[i].start.y);
+            console.log(distStart, routeLength);
 
             if (distStart + routeLength + step < data.map[i].end) {
                 // routes possible before deadline
-                car.possible.push(data.map[i].index);
+                let totalSteps = distStart + routeLength;
+                if (step + distStart < data.map[i].begin) {
+                    totalSteps += data.map[i].begin - (step + distStart);
+                }
+
+                car.possible.push({
+                    totSteps: totalSteps,
+                    index: data.map[i].index,
+                    start: data.map[i].begin - step + distStart,
+                    abs: Math.abs(data.map[i].begin - step + distStart)
+                });
             }
-
-
-
-            //if (distStart <= data.map[i].begin) {}
         }
     }
+    //console.log(car);
+}
+
+function sortRoutes(car) {
+    car.possible.sort(function(obj1, obj2) {
+        return obj1.abs - obj2.abs;
+    });
 }
