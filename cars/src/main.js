@@ -65,14 +65,29 @@ function jsonToRaw(data) {
 
 
 function writeFile(data) {
-    if (process.argv[3] != "print") {
+    if (process.argv[3] !== "print") {
         return;
     }
 
-    console.log("writing file..");
     let output_name = filename.split('/');
+    output_name = output_name[output_name.length-1].split('.')[0] + '.out'
 
-    fs.appendFile(output_name[output_name.length-1].split('.')[0] + '.out', data, (err) => {
+    console.log("writing file..");
+
+
+    fs.unlink(output_name, function(err) {
+        if(err && err.code === 'ENOENT') {
+            // file doens't exist
+            console.info("File doesn't exist, won't remove it.");
+        } else if (err) {
+            // other errors, e.g. maybe we don't have enough permission
+            console.error("Error occurred while trying to remove file");
+        } else {
+            console.info(`Removed and created file`);
+        }
+    });
+
+    fs.appendFile(output_name, data, (err) => {
         if (err) {
             console.error("failed!")
         } else {
@@ -97,6 +112,8 @@ function run(data) {
         [0],
         [2, 1]
     ];
+
+
     jsonToRaw(res);
 
     console.log("RUNNING FINISHED");
