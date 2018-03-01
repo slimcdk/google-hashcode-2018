@@ -37,6 +37,8 @@ function rawToJSON(data) {
         if (lines[i].length) {
             let data = lines[i].split(" ");
             res.map.push({
+                index: i,
+                occupied: false,
                 start: {x: data[1], y: data[0]},
                 stop: {x: data[3], y: data[2]},
                 begin: data[4],
@@ -89,14 +91,26 @@ function writeFile(data) {
  * ****************************************************************************************************
  */
 
+/*
+    let a = [
+        { name: "Robin Van Persie", age: 28 },
+        { name: "Theo Walcott", age: 22 },
+        { name: "Bacary Sagna", age: 26  }
+    ].sort(function(obj1, obj2) {
+        // Ascending: first age less than the previous
+        return obj1.age - obj2.age;
+    });
+    console.log(a);
+*/
+
 function run(data) {
     console.log("RUNNING");
     console.log(data);
 
-    let res = [
-        [0],
-        [2, 1]
-    ];
+    let res = [];
+    for (let i = 0; i < data.fleet; i++) {
+        res.push([i]);
+    }
     jsonToRaw(res);
 
     console.log("RUNNING FINISHED");
